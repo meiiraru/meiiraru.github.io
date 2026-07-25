@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meii"s Portfolio</title>
+    <style>
+        :root {
+            --taskbar-height: 36px;
+            --taskbar-bg: #2020207F;
+            --window-bg: #F0F0F0;
+            --window-header: #323232;
+            --text-color: #323232;
+            --accent: #FF72AD;
+            --accent_alpha: #FF72AD44;
+            --accent_2: #AD72FF;
+            --sparkle_color: #FFFFFF;
+        }
+
+        @font-face {
+            font-family: "Minakaka";
+            src: url("./assets/minakaka.ttf") format("truetype");
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: "Minakaka", "Courier New", Courier, monospace;
+            user-select: none;
+            image-rendering: pixelated;
+        }
+
+        ::selection {
+            color: #FFFFFF;
+            background: var(--accent_2);
+        }
+
+        body {
+            overflow: hidden;
+            background-color: #F3D9EE;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #wallpaper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            background-image: url("./assets/bg.png");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            animation: driftSky 25s ease-in-out infinite alternate;
+        }
+
+        @keyframes driftSky {
+            0% {
+                background-position: 0 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 50% 100%;
+            }
+        }
+
+        /* desktop stuff */
+        #desktop {
+            flex-grow: 1;
+            position: relative;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            align-content: flex-start;
+            gap: 15px;
+            max-height: calc(100vh - var(--taskbar-height));
+        }
+
+        .icon {
+            width: 80px;
+            height: 90px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 1px;
+        }
+
+        .icon:hover, .icon:focus {
+            background-color: var(--accent_alpha);
+            outline: 1px solid var(--accent);
+        }
+
+        .icon-img {
+            width: 70%;
+            height: auto;
+            margin-bottom: 5px;
+            filter: drop-shadow(5px 5px 3px rgba(0, 0, 0, 0.3));
+        }
+
+        .icon-text {
+            color: white;
+            font-size: 12px;
+            text-shadow: 1px 1px 2px black;
+            word-wrap: anywhere;
+        }
+
+        /* taskbar */
+        #taskbar {
+            height: var(--taskbar-height);
+            background: var(--taskbar-bg);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 10px;
+            z-index: 9999;
+        }
+
+        .taskbar-left, .taskbar-right {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .profile-icon {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-right: 32px;
+        }
+
+        .social-icon {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            transition: transform 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .social-icon:hover {
+            transform: scale(1.1);
+        }
+
+        #clock {
+            color: white;
+            font-size: 14px;
+        }
+
+        /* windows */
+        .window {
+            position: absolute;
+            min-width: 400px;
+            max-width: 90vw;
+            max-height: 90vh;
+            background: var(--window-bg);
+            box-shadow: 5px 5px 3px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid var(--window-header);
+            border-radius: 1px;
+        }
+
+        .window:focus, .window:focus-within {
+            border-color: var(--accent);
+        }
+
+        .window-header {
+            background: var(--window-header);
+            color: white;
+            padding: 4px 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: grab;
+            font-size: 14px;
+            max-height: 24px;
+        }
+
+        .window-header:active {
+            cursor: grabbing;
+        }
+
+        .window-title {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .window-title-icon {
+            width: 16px;
+            height: auto;
+        }
+
+        .close-btn {
+            background: #FF5C5C;
+            border: none;
+            color: white;
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            font-size: 10px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 1px;
+        }
+
+        .close-btn:hover {
+            background: #FF2020;
+        }
+
+        .window-content {
+            padding: 15px;
+            flex-grow: 1;
+            overflow-y: auto;
+            color: var(--text-color);
+            min-height: 200px;
+        }
+
+        /* folders */
+        .folder-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .folder-grid .icon-text {
+            color: var(--text-color);
+            text-shadow: none;
+        }
+
+        .folder-grid .icon:hover, .folder-grid .icon:focus {
+            background-color: var(--accent_alpha);
+            outline: 1px solid var(--accent);
+        }
+
+        /* content */
+        .text-file {
+            white-space: pre-wrap;
+            line-height: 1.5;
+            user-select: text;
+        }
+
+        .image-wrapper {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .image-file {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto;
+            image-rendering: auto;
+        }
+
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 32px;
+            height: 32px;
+            border-radius: 1px;
+            background: rgba(51, 51, 51, 0.6);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.3;
+            transition: opacity 0.3s ease, background 0.3s ease;
+            z-index: 10;
+        }
+
+        .nav-btn:hover {
+            opacity: 1;
+            background: rgba(51, 51, 51, 0.9);
+        }
+
+        .prev-btn {
+            left: 15px;
+        }
+
+        .next-btn {
+            right: 15px;
+        }
+    </style>
+</head>
+<body>
+<div id="wallpaper"></div>
+<div id="desktop"></div>
+<div id="taskbar">
+    <div class="taskbar-left">
+        <p class="profile-icon"><img src="./assets/pfp.png" alt="profile">Meiiraru</p>
+        <a href="https://github.com/meiiraru" target="_blank" class="social-icon" title="GitHub"><img src="./assets/github.png" alt="github"></a>
+        <a href="https://meiiraru.itch.io/" target="_blank" class="social-icon" title="Itch.io"><img src="./assets/itchio.png" alt="itch.io"></a>
+        <a href="https://discord.com/users/846701554273746964" target="_blank" class="social-icon" title="Discord"><img src="./assets/discord.png" alt="discord"></a>
+        <a href="https://linkedin.com/in/meiiraru" target="_blank" class="social-icon" title="LinkedIn"><img src="./assets/linkedin.png" alt="linkedin"></a>
+        <a href="mailto:meiiraru@edu.unisinos.br" class="social-icon" title="Email"><img src="./assets/mail.png" alt="email"></a>
+    </div>
+    <div class="taskbar-right">
+        <div id="clock">10:42:00</div>
+    </div>
+</div>
+
+<script>
+    const fileSystem = {
+        "Projects": {
+            type: "folder",
+            icon: "./assets/folder.png",
+            children: {
+                "portfolio.abc": {
+                    type: "file",
+                    icon: "./assets/abc.png",
+                    content: "meow meow"
+                },
+                "img 1.img": {
+                    type: "image",
+                    icon: "./assets/img.png",
+                    url: "./assets/bg.png"
+                },
+                "img 2.img": {
+                    type: "image",
+                    icon: "./assets/img.png",
+                    url: "./assets/bg.png"
+                },
+                "Meow": {
+                    type: "folder",
+                    icon: "./assets/folder.png",
+                    children: {
+                        "me.abc": {
+                            type: "file",
+                            icon: "./assets/abc.png",
+                            content: "meow!"
+                        },
+                        "ow.img": {
+                            type: "image",
+                            icon: "./assets/img.png",
+                            url: "./assets/bg.png"
+                        },
+                        "ww.img": {
+                            type: "image",
+                            icon: "./assets/img.png",
+                            url: "./assets/bg.png"
+                        },
+                        "1.abc": {
+                            type: "file",
+                            icon: "./assets/abc.png",
+                            content: "meow!"
+                        },
+                        "2.abc": {
+                            type: "file",
+                            icon: "./assets/abc.png",
+                            content: "meow!"
+                        },
+                        "3.abc": {
+                            type: "file",
+                            icon: "./assets/abc.png",
+                            content: "meow!"
+                        },
+                        "4.abc": {
+                            type: "file",
+                            icon: "./assets/abc.png",
+                            content: "meow!"
+                        },
+                        "5.abc": {
+                            type: "file",
+                            icon: "./assets/abc.png",
+                            content: "meow!"
+                        },
+                        "6.abc": {
+                            type: "file",
+                            icon: "./assets/abc.png",
+                            content: "meow!"
+                        },
+                        "7.abc": {
+                            type: "file",
+                            icon: "./assets/abc.png",
+                            content: "meow!"
+                        },
+                        "8.abc": {
+                            type: "file",
+                            icon: "./assets/abc.png",
+                            content: "meow!"
+                        },
+                        "9.abc": {
+                            type: "file",
+                            icon: "./assets/abc.png",
+                            content: "meow!"
+                        }
+                    }
+                }
+            }
+        },
+        "More stuff": {
+            type: "folder",
+            icon: "./assets/folder.png",
+            children: {
+                "large img only.img": {
+                    type: "image",
+                    icon: "./assets/img.png",
+                    url: "./assets/bg.png"
+                }
+            }
+        },
+        "about.abc": {
+            type: "file",
+            icon: "./assets/abc.png",
+            content: "Wawa wawa wawa wawa!\n\nWawawwawawa\nwawawa."
+        },
+        "resume.abc": {
+            type: "file",
+            icon: "./assets/abc.png",
+            content: "Meow meow mrrp meo mwor\n\npurr~"
+        },
+        "root img.img": {
+            type: "image",
+            icon: "./assets/img.png",
+            url: "./assets/bg.png"
+        },
+        "a.img": {
+            type: "image",
+            icon: "./assets/img.png",
+            url: "./assets/bg.png"
+        },
+        "b.img": {
+            type: "image",
+            icon: "./assets/img.png",
+            url: "./assets/bg.png"
+        },
+        "c.img": {
+            type: "image",
+            icon: "./assets/img.png",
+            url: "./assets/bg.png"
+        },
+        "d.img": {
+            type: "image",
+            icon: "./assets/img.png",
+            url: "./assets/bg.png"
+        },
+        "e.img": {
+            type: "image",
+            icon: "./assets/img.png",
+            url: "./assets/bg.png"
+        },
+        "f.img": {
+            type: "image",
+            icon: "./assets/img.png",
+            url: "./assets/bg.png"
+        },
+        "g.img": {
+            type: "image",
+            icon: "./assets/img.png",
+            url: "./assets/bg.png"
+        }
+    };
+
+    //desktop management
+    let zIndexCounter = 10;
+    const desktop = document.getElementById("desktop");
+
+    for (const [name, data] of Object.entries(fileSystem))
+        renderIcon(name, data, desktop, fileSystem);
+
+    //icon factory
+    function renderIcon(name, data, container, parentFolder) {
+        const iconDiv = document.createElement("div");
+        iconDiv.className = "icon";
+        iconDiv.tabIndex = 0;
+
+        iconDiv.innerHTML = `
+                <img src=${data.icon} alt="icon" class="icon-img">
+                <div class="icon-text">${name}</div>
+            `;
+
+        iconDiv.ondblclick = () => openWindow(name, data, parentFolder);
+        container.appendChild(iconDiv);
+    }
+
+    //window management
+    function openWindow(title, data, parentFolder) {
+        //create window
+        const win = document.createElement("div");
+        win.className = "window";
+
+        const randomOffset = Math.floor(Math.random() * 50);
+        win.style.top  = (50 + randomOffset) + "px";
+        win.style.left = (50 + randomOffset) + "px";
+        win.style.zIndex = String(++zIndexCounter);
+
+        //bring window to front on click
+        win.onmousedown = () => {
+            win.style.zIndex = String(++zIndexCounter);
+        };
+
+        //create window header
+        const header = document.createElement("div");
+        header.className = "window-header";
+        header.innerHTML = `
+                <div class="window-title">
+                    <img class="window-title-icon" src="${data.icon}" alt="icon">
+                    <span class="window-title-text">${title}</span>
+                </div>
+                <button class="close-btn" onclick="this.parentElement.parentElement.remove()">✕</button>
+            `;
+
+        //create window content
+        const content = document.createElement("div");
+        content.className = "window-content";
+
+        if (data.type === "folder") {
+            //folder only have icons
+            content.classList.add("folder-grid");
+            for (const [childName, childData] of Object.entries(data.children))
+                renderIcon(childName, childData, content, data.children);
+        } else if (data.type === "file") {
+            //text is only the text itself
+            content.innerHTML = `<div class="text-file">${data.content}</div>`;
+        } else if (data.type === "image") {
+            //images are displayed as large as possible
+            win.style.width = "85vw";
+            win.style.height = "85vh";
+
+            content.style.display = "flex";
+            content.style.flexDirection = "column";
+
+            const imageKeys = Object.keys(parentFolder).filter(key => parentFolder[key].type === "image");
+            let currentIndex = imageKeys.indexOf(title);
+            const hasMultipleImages = imageKeys.length > 1;
+
+            //create the image viewer
+            content.innerHTML = `
+                    <div class="image-wrapper">
+                        ${hasMultipleImages ? "<button class='nav-btn prev-btn' title='Previous'>&#10094;</button>" : ""}
+                        <img src="${data.url}" class="image-file" alt="${title}">
+                        ${hasMultipleImages ? "<button class='nav-btn next-btn' title='Next'>&#10095;</button>" : ""}
+                    </div>
+                `;
+
+            //only attach the image change events if we have a gallery
+            if (hasMultipleImages) {
+                const imgElement = content.querySelector(".image-file");
+                const titleElement = header.querySelector(".window-title");
+
+                const updateImage = (index) => {
+                    currentIndex = index;
+                    const newKey = imageKeys[currentIndex];
+                    const newData = parentFolder[newKey];
+
+                    imgElement.src = newData.url;
+                    imgElement.alt = newKey;
+                    titleElement.innerHTML = `
+                            <img class="window-title-icon" src="${newData.icon}" alt="icon">
+                            <span class="window-title-text">${newKey}</span>
+                        `;
+                };
+
+                content.querySelector(".prev-btn").onclick = () => {
+                    let newIndex = currentIndex - 1;
+                    if (newIndex < 0) newIndex = imageKeys.length - 1;
+                    updateImage(newIndex);
+                };
+
+                content.querySelector(".next-btn").onclick = () => {
+                    let newIndex = currentIndex + 1;
+                    if (newIndex >= imageKeys.length) newIndex = 0;
+                    updateImage(newIndex);
+                };
+            }
+        }
+
+        //append data to the window and the window to the desktop
+        win.appendChild(header);
+        win.appendChild(content);
+        document.body.appendChild(win);
+
+        makeDraggable(win, header);
+    }
+
+    //drag and drop
+    function makeDraggable(element, handle) {
+        let x = 0, y = 0;
+
+        //store the initial position and set up the drag events on click
+        handle.onmousedown = dragMouseDown;
+        function dragMouseDown(e) {
+            e.preventDefault();
+            x = e.clientX;
+            y = e.clientY;
+            document.onmouseup   = closeDragElement;
+            document.onmousemove = elementDrag;
+        }
+
+        //change position on mouse move
+        function elementDrag(e) {
+            e.preventDefault();
+            let dx = x - e.clientX;
+            let dy = y - e.clientY;
+            x = e.clientX;
+            y = e.clientY;
+
+            let newTop  = element.offsetTop  - dy;
+            let newLeft = element.offsetLeft - dx;
+
+            //ensure it is within the window
+            newTop  = Math.max(0, Math.min(newTop,  window.innerHeight - element.offsetHeight));
+            newLeft = Math.max(0, Math.min(newLeft, window.innerWidth  - element.offsetWidth));
+
+            element.style.top  = newTop  + "px";
+            element.style.left = newLeft + "px";
+        }
+
+        //stop dragging on mouse up
+        function closeDragElement() {
+            document.onmouseup   = null;
+            document.onmousemove = null;
+        }
+    }
+
+    //clock
+    function updateClock() {
+        const now = new Date();
+        document.getElementById("clock").innerText = now.toLocaleTimeString([], {
+            hour:   "2-digit",
+            minute: "2-digit",
+            second: "2-digit"
+        });
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    //click sound
+    //document.addEventListener("click", () => {
+    //    new Audio("./assets/click.mp3").play();
+    //});
+</script>
+<script src="./assets/twinkle.js"></script>
+</body>
+</html>
