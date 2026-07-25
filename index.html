@@ -56,19 +56,6 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            animation: driftSky 25s ease-in-out infinite alternate;
-        }
-
-        @keyframes driftSky {
-            0% {
-                background-position: 0 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 50% 100%;
-            }
         }
 
         /* desktop stuff */
@@ -105,13 +92,13 @@
             width: 70%;
             height: auto;
             margin-bottom: 5px;
-            filter: drop-shadow(5px 5px 3px rgba(0, 0, 0, 0.3));
+            filter: drop-shadow(5px 5px 3px rgba(0, 0, 0, 0.5));
         }
 
         .icon-text {
             color: white;
             font-size: 12px;
-            text-shadow: 1px 1px 2px black;
+            text-shadow: 2px 2px 3px black;
             word-wrap: anywhere;
         }
 
@@ -166,10 +153,9 @@
         .window {
             position: absolute;
             min-width: 400px;
-            max-width: 90vw;
-            max-height: 90vh;
+            min-height: 100px;
             background: var(--window-bg);
-            box-shadow: 5px 5px 3px rgba(0, 0, 0, 0.3);
+            box-shadow: 5px 5px 3px rgba(0, 0, 0, 0.5);
             display: flex;
             flex-direction: column;
             overflow: hidden;
@@ -232,7 +218,7 @@
             flex-grow: 1;
             overflow-y: auto;
             color: var(--text-color);
-            min-height: 200px;
+            min-height: 100px;
         }
 
         /* folders */
@@ -240,6 +226,10 @@
             display: flex;
             flex-wrap: wrap;
             gap: 15px;
+        }
+
+        .folder-grid .icon-img {
+            filter: none;
         }
 
         .folder-grid .icon-text {
@@ -309,6 +299,53 @@
         .next-btn {
             right: 15px;
         }
+
+        .audio-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .audio-player {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--window-header);
+            padding: 10px;
+            border-radius: 1px;
+            color: white;
+            width: 100%;
+        }
+
+        .audio-btn {
+            background: var(--accent);
+            border: none;
+            color: white;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 1px;
+        }
+
+        .audio-btn:hover {
+            background: var(--accent_2);
+        }
+
+        .seek-slider {
+            flex-grow: 1;
+            cursor: pointer;
+            accent-color: var(--accent);
+        }
+
+        .time-display {
+            font-size: 12px;
+            min-width: 85px;
+            text-align: right;
+        }
     </style>
 </head>
 <body>
@@ -317,11 +354,11 @@
 <div id="taskbar">
     <div class="taskbar-left">
         <p class="profile-icon"><img src="./assets/pfp.png" alt="profile">Meiiraru</p>
-        <a href="https://github.com/meiiraru" target="_blank" class="social-icon" title="GitHub"><img src="./assets/github.png" alt="github"></a>
-        <a href="https://meiiraru.itch.io/" target="_blank" class="social-icon" title="Itch.io"><img src="./assets/itchio.png" alt="itch.io"></a>
-        <a href="https://discord.com/users/846701554273746964" target="_blank" class="social-icon" title="Discord"><img src="./assets/discord.png" alt="discord"></a>
-        <a href="https://linkedin.com/in/meiiraru" target="_blank" class="social-icon" title="LinkedIn"><img src="./assets/linkedin.png" alt="linkedin"></a>
-        <a href="mailto:meiiraru@edu.unisinos.br" class="social-icon" title="Email"><img src="./assets/mail.png" alt="email"></a>
+        <a href="https://github.com/meiiraru" target="_blank" class="social-icon" title="GitHub"><img src="./assets/web_badges/github.png" alt="github"></a>
+        <a href="https://meiiraru.itch.io/" target="_blank" class="social-icon" title="Itch.io"><img src="./assets/web_badges/itchio.png" alt="itch.io"></a>
+        <a href="https://discord.com/users/846701554273746964" target="_blank" class="social-icon" title="Discord"><img src="./assets/web_badges/discord.png" alt="discord"></a>
+        <a href="https://linkedin.com/in/meiiraru" target="_blank" class="social-icon" title="LinkedIn"><img src="./assets/web_badges/linkedin.png" alt="linkedin"></a>
+        <a href="mailto:meiiraru@edu.unisinos.br" class="social-icon" title="Email"><img src="./assets/web_badges/mail.png" alt="email"></a>
     </div>
     <div class="taskbar-right">
         <div id="clock">10:42:00</div>
@@ -332,85 +369,68 @@
     const fileSystem = {
         "Projects": {
             type: "folder",
-            icon: "./assets/folder.png",
             children: {
                 "portfolio.abc": {
                     type: "file",
-                    icon: "./assets/abc.png",
                     content: "meow meow"
                 },
                 "img 1.img": {
                     type: "image",
-                    icon: "./assets/img.png",
                     url: "./assets/bg.png"
                 },
                 "img 2.img": {
                     type: "image",
-                    icon: "./assets/img.png",
                     url: "./assets/bg.png"
                 },
                 "Meow": {
                     type: "folder",
-                    icon: "./assets/folder.png",
                     children: {
                         "me.abc": {
                             type: "file",
-                            icon: "./assets/abc.png",
                             content: "meow!"
                         },
                         "ow.img": {
                             type: "image",
-                            icon: "./assets/img.png",
                             url: "./assets/bg.png"
                         },
                         "ww.img": {
                             type: "image",
-                            icon: "./assets/img.png",
                             url: "./assets/bg.png"
                         },
                         "1.abc": {
                             type: "file",
-                            icon: "./assets/abc.png",
                             content: "meow!"
                         },
                         "2.abc": {
                             type: "file",
-                            icon: "./assets/abc.png",
                             content: "meow!"
                         },
                         "3.abc": {
                             type: "file",
-                            icon: "./assets/abc.png",
                             content: "meow!"
                         },
                         "4.abc": {
                             type: "file",
-                            icon: "./assets/abc.png",
                             content: "meow!"
                         },
                         "5.abc": {
                             type: "file",
-                            icon: "./assets/abc.png",
                             content: "meow!"
                         },
                         "6.abc": {
                             type: "file",
-                            icon: "./assets/abc.png",
                             content: "meow!"
                         },
                         "7.abc": {
                             type: "file",
-                            icon: "./assets/abc.png",
                             content: "meow!"
                         },
                         "8.abc": {
                             type: "file",
-                            icon: "./assets/abc.png",
                             content: "meow!"
                         },
                         "9.abc": {
                             type: "file",
-                            icon: "./assets/abc.png",
                             content: "meow!"
                         }
                     }
@@ -419,64 +439,60 @@
         },
         "More stuff": {
             type: "folder",
-            icon: "./assets/folder.png",
             children: {
                 "large img only.img": {
                     type: "image",
-                    icon: "./assets/img.png",
                     url: "./assets/bg.png"
                 }
             }
         },
         "about.abc": {
             type: "file",
-            icon: "./assets/abc.png",
-            content: "Wawa wawa wawa wawa!\n\nWawawwawawa\nwawawa."
+            content: "Wawa wawa wawa wawa!\n\nWawawwawawa\nwawawa.<div><h1>test</h1></div>"
         },
         "resume.abc": {
             type: "file",
-            icon: "./assets/abc.png",
             content: "Meow meow mrrp meo mwor\n\npurr~"
         },
         "root img.img": {
             type: "image",
-            icon: "./assets/img.png",
             url: "./assets/bg.png"
         },
         "a.img": {
             type: "image",
-            icon: "./assets/img.png",
             url: "./assets/bg.png"
         },
         "b.img": {
             type: "image",
-            icon: "./assets/img.png",
             url: "./assets/bg.png"
         },
         "c.img": {
             type: "image",
-            icon: "./assets/img.png",
             url: "./assets/bg.png"
         },
         "d.img": {
             type: "image",
-            icon: "./assets/img.png",
             url: "./assets/bg.png"
         },
         "e.img": {
             type: "image",
-            icon: "./assets/img.png",
             url: "./assets/bg.png"
         },
         "f.img": {
             type: "image",
-            icon: "./assets/img.png",
             url: "./assets/bg.png"
         },
         "g.img": {
             type: "image",
-            icon: "./assets/img.png",
             url: "./assets/bg.png"
+        },
+        "song.snd": {
+            type: "audio",
+            url: "./assets/click.mp3"
+        },
+        "meow.vid": {
+            type: "video",
+            url: "https://www.youtube.com/embed/dQw4w9WgXcQ"
         }
     };
 
@@ -494,7 +510,7 @@
         iconDiv.tabIndex = 0;
 
         iconDiv.innerHTML = `
-                <img src=${data.icon} alt="icon" class="icon-img">
+                <img src=./assets/icons/${data.type}.png alt="icon" class="icon-img">
                 <div class="icon-text">${name}</div>
             `;
 
@@ -523,7 +539,7 @@
         header.className = "window-header";
         header.innerHTML = `
                 <div class="window-title">
-                    <img class="window-title-icon" src="${data.icon}" alt="icon">
+                    <img class="window-title-icon" src="./assets/icons/${data.type}.png" alt="icon">
                     <span class="window-title-text">${title}</span>
                 </div>
                 <button class="close-btn" onclick="this.parentElement.parentElement.remove()">✕</button>
@@ -538,15 +554,20 @@
             content.classList.add("folder-grid");
             for (const [childName, childData] of Object.entries(data.children))
                 renderIcon(childName, childData, content, data.children);
+
+            win.style.maxWidth  = "calc(min(85vw, 600px))";
+            win.style.maxHeight = "calc(min(85vh, 400px))";
         } else if (data.type === "file") {
             //text is only the text itself
             content.innerHTML = `<div class="text-file">${data.content}</div>`;
         } else if (data.type === "image") {
             //images are displayed as large as possible
-            win.style.width = "85vw";
+            win.style.width  = "85vw";
             win.style.height = "85vh";
 
-            content.style.display = "flex";
+            content.style.padding  = "0";
+            content.style.overflow = "hidden";
+            content.style.display  = "flex";
             content.style.flexDirection = "column";
 
             const imageKeys = Object.keys(parentFolder).filter(key => parentFolder[key].type === "image");
@@ -575,7 +596,7 @@
                     imgElement.src = newData.url;
                     imgElement.alt = newKey;
                     titleElement.innerHTML = `
-                            <img class="window-title-icon" src="${newData.icon}" alt="icon">
+                            <img class="window-title-icon" src="./assets/icons/${newData.type}.png" alt="icon">
                             <span class="window-title-text">${newKey}</span>
                         `;
                 };
@@ -592,6 +613,76 @@
                     updateImage(newIndex);
                 };
             }
+        } else if (data.type === "audio") {
+            //audio player
+            win.style.width  = "300px";
+            win.style.height = "100px";
+
+            content.innerHTML = `
+                <div class="audio-wrapper">
+                    <audio src="${data.url}"></audio>
+                    <div class="audio-player">
+                        <button class="audio-btn play-btn">▶</button>
+                        <input type="range" class="seek-slider" value="0" step="0.1">
+                        <span class="time-display">00:00 / 00:00</span>
+                    </div>
+                </div>
+            `;
+
+            const audioEl = content.querySelector('audio');
+            const playBtn = content.querySelector('.play-btn');
+            const seekSlider  = content.querySelector('.seek-slider');
+            const timeDisplay = content.querySelector('.time-display');
+
+            const formatTime = (time) => {
+                if (isNaN(time))
+                    return "00:00";
+
+                const mins = Math.floor(time / 60).toString().padStart(2, '0');
+                const secs = Math.floor(time % 60).toString().padStart(2, '0');
+                return `${mins}:${secs}`;
+            };
+
+            //load metadata to get the full duration
+            audioEl.onloadedmetadata = () => {
+                seekSlider.max = audioEl.duration;
+                timeDisplay.textContent = `${formatTime(audioEl.currentTime)} / ${formatTime(audioEl.duration)}`;
+            };
+
+            //update timer and slider as it plays
+            audioEl.ontimeupdate = () => {
+                seekSlider.value = audioEl.currentTime;
+                timeDisplay.textContent = `${formatTime(audioEl.currentTime)} / ${formatTime(audioEl.duration)}`;
+            };
+
+            //allow scrubbing through the slider
+            seekSlider.oninput = () => {
+                audioEl.currentTime = seekSlider.value;
+            };
+
+            //play/pause logic
+            playBtn.onclick = () => {
+                if (audioEl.paused) {
+                    audioEl.play();
+                    playBtn.textContent = "⏸";
+                } else {
+                    audioEl.pause();
+                    playBtn.textContent = "▶";
+                }
+            };
+        } else if (data.type === "video") {
+            //embed/video viewer also as large as possible
+            win.style.width  = "85vw";
+            win.style.height = "85vw";
+            content.style.padding  = "0";
+            content.style.overflow = "hidden";
+
+            content.innerHTML = `
+                <iframe width="100%" height="100%" src="${data.url}"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen style="display: block; border: none;">
+                </iframe>
+            `;
         }
 
         //append data to the window and the window to the desktop
